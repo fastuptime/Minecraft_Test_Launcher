@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+    <style>
+        body {
+            background-color: #3f8651;
+            color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+        }
+
+        button {
+            background-color: #fff;
+            border: none;
+            border-radius: 5px;
+            color: #3f8651;
+            cursor: pointer;
+            font-size: 20px;
+            margin-top: 20px;
+            padding: 10px 20px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #206ba8;
+            color: #fff;
+        }
+
+        input {
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            margin-top: 20px;
+            padding: 10px 20px;
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+    <h1>Minecraft Test Launcher</h1>
+    <p>Click the button below to start the game.</p>
+    <input type="text" id="username" placeholder="Username" />
+    <button id="start">Play Game</button>
+
+    <p id="status" hidden></p>
+
+    <p style="position: fixed; bottom: 0; right: 2; color: #fff">
+        Made with <span style="color: #ff0000">&hearts;</span> by
+        <a href="https://github.com/fastuptime" target="_blank" style="color: #fff">FastUptime</a>
+    </p>
+
+    <script>
+        const { ipcRenderer } = require("electron");
+        document.getElementById("start").addEventListener("click", function () {
+            var username = document.getElementById("username").value;
+            if (username == "") return alert("Please enter a username");
+            ipcRenderer.send("start", username);
+
+            document.getElementById("start").innerHTML = "Starting...";
+            document.getElementById("start").disabled = true;
+        });
+
+        ipcRenderer.on("data", (event, arg) => {
+            document.getElementById("status").innerHTML = `Loading: ${arg}`;
+            document.getElementById("status").hidden = false;
+        });
+    </script>
+</body>
+
+</html>
